@@ -1,9 +1,11 @@
 """
 title: Calculator Tool
-author: Pyotr Growpotkin
 description: A simple calculator tool that supports basic arithmetic operations, exponentiation, and mathematical functions.
-version: 0.0.2
+author: Pyotr Growpotkin
+author_url: https://github.com/christ-offer/
 github: https://github.com/christ-offer/open-webui-tools
+funding_url: https://github.com/open-webui
+version: 0.0.2
 license: MIT
 """
 

@@ -1,10 +1,12 @@
 """
 title: Web Scrape
-author: Pyotr Growpotkin
-version: 0.0.2
-github: https://github.com/christ-offer/open-webui-tools
-license: MIT
 description: A simple web scraping tool that extracts text content using BeautifulSoup.
+author: Pyotr Growpotkin
+author_url: https://github.com/christ-offer/
+github: https://github.com/christ-offer/open-webui-tools
+funding_url: https://github.com/open-webui
+version: 0.0.2
+license: MIT
 """
 
 import requests

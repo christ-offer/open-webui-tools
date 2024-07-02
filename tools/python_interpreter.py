@@ -1,10 +1,12 @@
 """
 title: Python Code Interpreter
-author: Pyotr Growpotkin
-version: 0.0.1
-github: https://github.com/christ-offer/open-webui-tools
-license: MIT
 description: A simple tool that allows you to execute Python code directly in your WebUI.
+author: Pyotr Growpotkin
+author_url: https://github.com/christ-offer/
+github: https://github.com/christ-offer/open-webui-tools
+funding_url: https://github.com/open-webui
+version: 0.0.1
+license: MIT
 """
 
 import subprocess

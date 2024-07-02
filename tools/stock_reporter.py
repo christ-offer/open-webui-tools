@@ -2,7 +2,9 @@
 title: Stock Market Helper
 description: A comprehensive stock analysis tool that gathers data from Finnhub API and compiles a detailed report.
 author: Pyotr Growpotkin
+author_url: https://github.com/christ-offer/
 github: https://github.com/christ-offer/open-webui-tools
+funding_url: https://github.com/open-webui
 version: 0.0.6
 license: MIT
 requirements: finnhub-python
