@@ -17,3 +17,15 @@ You also need to install the `finnhub-python` package using pip.
 
 If you are running owui through docker, you can install it using the following command:
 docker exec -it owui bash -c "pip install finnhub-python"
+
+### Web Scrape
+
+Two simple web scraping tools that extract text content from web pages using BeautifulSoup or Jina Reader.
+
+### Python Code Interpreter
+
+A simple Python code interpreter that executes Python code and returns the output.
+
+### Calculator
+
+A simple calculator tool that supports basic arithmetic operations, exponentiation, and mathematical functions.
