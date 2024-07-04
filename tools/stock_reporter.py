@@ -5,7 +5,7 @@ author: Pyotr Growpotkin
 author_url: https://github.com/christ-offer/
 github: https://github.com/christ-offer/open-webui-tools
 funding_url: https://github.com/open-webui
-version: 0.0.7
+version: 0.0.8
 license: MIT
 requirements: finnhub-python
 """
