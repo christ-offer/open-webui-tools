@@ -78,37 +78,36 @@ def _get_company_news(client: finnhub.Client, ticker: str) -> List[Dict[str, str
     return [{"url": item["url"], "title": item["headline"]} for item in news_items]
 
 
-# Asynchronous web scraping
-async def _async_web_scrape(session: aiohttp.ClientSession, url: str) -> Optional[str]:
+async def _async_web_scrape(session: aiohttp.ClientSession, url: str) -> str:
+    """
+    Scrape and process a web page using r.jina.ai
+
+    :param session: The aiohttp ClientSession to use for the request.
+    :param url: The URL of the web page to scrape.
+    :return: The scraped and processed content without the Links/Buttons section, or an error message.
+    """
+    jina_url = f"https://r.jina.ai/{url}"
+
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        "X-No-Cache": "true",
+        "X-With-Images-Summary": "true",
+        "X-With-Links-Summary": "true",
     }
 
     try:
-        async with session.get(url, headers=headers) as response:
+        async with session.get(jina_url, headers=headers) as response:
             response.raise_for_status()
             content = await response.text()
 
-        soup = BeautifulSoup(content, "html.parser")
+        # Extract content and remove Links/Buttons section as its too many tokens
+        links_section_start = content.rfind("Images:")
+        if links_section_start != -1:
+            content = content[:links_section_start].strip()
 
-        for element in soup(
-            ["script", "style", "nav", "footer", "header", "a", "button"]
-        ):
-            element.decompose()
+        return content
 
-        text_elements = soup.find_all(["p", "h1", "h2", "h3", "h4", "h5", "h6", "li"])
-        text = " ".join(element.get_text().strip() for element in text_elements)
-        text = " ".join(text.split())
-
-        if len(text) < 100:
-            print(f"Skipping article (too short): {url}")
-            return None
-
-        return text
-
-    except Exception as e:
-        print(f"Error scraping web page: {str(e)}")
-        return None
+    except aiohttp.ClientError as e:
+        return f"Error scraping web page: {str(e)}"
 
 
 # Asynchronous sentiment analysis
