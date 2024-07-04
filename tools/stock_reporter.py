@@ -5,7 +5,7 @@ author: Pyotr Growpotkin
 author_url: https://github.com/christ-offer/
 github: https://github.com/christ-offer/open-webui-tools
 funding_url: https://github.com/open-webui
-version: 0.0.6
+version: 0.0.7
 license: MIT
 requirements: finnhub-python
 """
@@ -174,6 +174,7 @@ def _compile_report(data: Dict[str, Any]) -> str:
     """
     profile = data["basic_info"]["profile"]
     financials = data["basic_info"]["basic_financials"]
+    metrics = financials["metric"]
     peers = data["basic_info"]["peers"]
     price_data = data["current_price"]
 
@@ -206,6 +207,44 @@ def _compile_report(data: Dict[str, Any]) -> str:
     Dividend Yield: {financials['metric'].get('dividendYieldIndicatedAnnual', 'N/A')}%
 
     Peer Companies: {', '.join(peers[:5])}
+
+    Detailed Financial Analysis:
+
+    1. Valuation Metrics:
+    P/E Ratio: {metrics.get('peBasicExclExtraTTM', 'N/A')}
+    - Interpretation: {'High (may be overvalued)' if metrics.get('peBasicExclExtraTTM', 0) > 25 else 'Moderate' if 15 <= metrics.get('peBasicExclExtraTTM', 0) <= 25 else 'Low (may be undervalued)'}
+
+    P/B Ratio: {metrics.get('pbQuarterly', 'N/A')}
+    - Interpretation: {'High' if metrics.get('pbQuarterly', 0) > 3 else 'Moderate' if 1 <= metrics.get('pbQuarterly', 0) <= 3 else 'Low'}
+
+    2. Profitability Metrics:
+    Return on Equity: {metrics.get('roeRfy', 'N/A')}%
+    - Interpretation: {'Excellent' if metrics.get('roeRfy', 0) > 20 else 'Good' if 15 <= metrics.get('roeRfy', 0) <= 20 else 'Average' if 10 <= metrics.get('roeRfy', 0) < 15 else 'Poor'}
+
+    Net Profit Margin: {metrics.get('netProfitMarginTTM', 'N/A')}%
+    - Interpretation: {'Excellent' if metrics.get('netProfitMarginTTM', 0) > 20 else 'Good' if 10 <= metrics.get('netProfitMarginTTM', 0) <= 20 else 'Average' if 5 <= metrics.get('netProfitMarginTTM', 0) < 10 else 'Poor'}
+
+    3. Liquidity and Solvency:
+    Current Ratio: {metrics.get('currentRatioQuarterly', 'N/A')}
+    - Interpretation: {'Strong' if metrics.get('currentRatioQuarterly', 0) > 2 else 'Healthy' if 1.5 <= metrics.get('currentRatioQuarterly', 0) <= 2 else 'Adequate' if 1 <= metrics.get('currentRatioQuarterly', 0) < 1.5 else 'Poor'}
+
+    Debt-to-Equity Ratio: {metrics.get('totalDebtToEquityQuarterly', 'N/A')}
+    - Interpretation: {'Low leverage' if metrics.get('totalDebtToEquityQuarterly', 0) < 0.5 else 'Moderate leverage' if 0.5 <= metrics.get('totalDebtToEquityQuarterly', 0) <= 1 else 'High leverage'}
+
+    4. Dividend Analysis:
+    Dividend Yield: {metrics.get('dividendYieldIndicatedAnnual', 'N/A')}%
+    - Interpretation: {'High yield' if metrics.get('dividendYieldIndicatedAnnual', 0) > 4 else 'Moderate yield' if 2 <= metrics.get('dividendYieldIndicatedAnnual', 0) <= 4 else 'Low yield'}
+
+    5. Market Performance:
+    52-Week Range: ${metrics.get('52WeekLow', 'N/A')} - ${metrics.get('52WeekHigh', 'N/A')}
+    Current Price Position: {((price_data['current_price'] - metrics.get('52WeekLow', price_data['current_price'])) / (metrics.get('52WeekHigh', price_data['current_price']) - metrics.get('52WeekLow', price_data['current_price'])) * 100):.2f}% of 52-Week Range
+
+    Beta: {metrics.get('beta', 'N/A')}
+    - Interpretation: {'More volatile than market' if metrics.get('beta', 1) > 1 else 'Less volatile than market' if metrics.get('beta', 1) < 1 else 'Same volatility as market'}
+
+    Overall Analysis:
+    {profile['name']} shows {'strong' if metrics.get('roeRfy', 0) > 15 and metrics.get('currentRatioQuarterly', 0) > 1.5 else 'moderate' if metrics.get('roeRfy', 0) > 10 and metrics.get('currentRatioQuarterly', 0) > 1 else 'weak'} financial health with {'high' if metrics.get('peBasicExclExtraTTM', 0) > 25 else 'moderate' if 15 <= metrics.get('peBasicExclExtraTTM', 0) <= 25 else 'low'} valuation metrics. The company's profitability is {'excellent' if metrics.get('netProfitMarginTTM', 0) > 20 else 'good' if metrics.get('netProfitMarginTTM', 0) > 10 else 'average' if metrics.get('netProfitMarginTTM', 0) > 5 else 'poor'}, and it has {'low' if metrics.get('totalDebtToEquityQuarterly', 0) < 0.5 else 'moderate' if metrics.get('totalDebtToEquityQuarterly', 0) < 1 else 'high'} financial leverage. Investors should consider these factors along with their investment goals and risk tolerance.
+
 
     Recent News and Sentiment Analysis:
     """
